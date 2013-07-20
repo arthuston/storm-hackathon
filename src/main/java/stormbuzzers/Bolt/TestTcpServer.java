@@ -14,8 +14,8 @@ class TestTcpServer
 		while(true)
         {
 			server.beginPush();
-            double lat = (generator.nextDouble() * 180.0) - 90;
-            double lon = (generator.nextDouble() * 360);
+            double lat = 40; // (generator.nextDouble() * 180.0) - 90;
+            double lon = -105; //(generator.nextDouble() * 360);
             int    count = generator.nextInt(100);
             int    sentiment = generator.nextInt(10);
 			server.push(lat, lon, count, sentiment);
