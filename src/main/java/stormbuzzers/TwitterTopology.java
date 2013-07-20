@@ -2,6 +2,9 @@ package storm.starter;
 
 import storm.starter.spout.TwitterLocationSpout;
 import storm.starter.bolt.TwitterParsingBolt;
+import storm.starter.bolt.UploadBolt;
+import storm.starter.bolt.AggregateBolt;
+import storm.starter.bolt.SemanticBolt;
 
 import backtype.storm.Config;
 import backtype.storm.LocalCluster;
@@ -32,8 +35,10 @@ public class TwitterTopology {
           .shuffleGrouping("tweetspout");
        builder.setBolt("semantics", new SemanticBolt(), 1)
          .shuffleGrouping("tweetparse");
-       builder.setBole("aggregate", new AggregateBolt(), 1)
+       builder.setBolt("aggregate", new AggregateBolt(), 1)
          .shuffleGrouping("semantics");
+       builder.setBolt("upload", new UploadBolt(), 1)
+         .shuffleGrouping("aggregate");
        
          StormSubmitter.submitTopology(args[0], conf, builder.createTopology());
          LocalCluster cluster = new LocalCluster();

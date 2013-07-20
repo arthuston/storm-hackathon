@@ -1,6 +1,9 @@
+package storm.starter.bolt;
+
 import java.io.*;
 import java.net.*;
 import java.util.Random;
+import storm.starter.bolt.TcpServer;
 
 class TestTcpServer
 {

@@ -1,3 +1,5 @@
+package storm.starter.bolt;
+
 import java.io.*;
 import java.net.*;
 import java.util.Random;
@@ -37,7 +39,7 @@ class TcpServer
 	private void writeBytes(String str) throws Exception {
 		try {
 			outToClient.writeBytes(str);
-		} catch (SocketException) {
+		} catch (SocketException sockex) {
 			clientSocket = null;
 			outToClient = null;
 			beginPush = false;

@@ -1,9 +1,10 @@
+package storm.starter.bolt;
 import java.lang.Math;
 
 public class Areas {
 
     // latitude and longitude
-    public class LatLon {
+    public static class LatLon {
         public double lat, lon;
         public String city;
         public LatLon(String city, double lat, double lon) {
@@ -13,7 +14,7 @@ public class Areas {
         }
     }
 
-    private static final LatLon CITIES[] = {
+    public static final LatLon CITIES[] = {
         new LatLon("NewYork",40.6643,-73.9385),
         new LatLon("California",34.0194,-118.4108),
         new LatLon("Illinois",41.8376,-87.6818),
@@ -117,7 +118,7 @@ public class Areas {
     };
 
     // get area for lat lon
-    public integer getArea(double lat, double lon) {
+    public int getArea(double lat, double lon) {
 
         // find closest city
         double minDistance = (double) Integer.MAX_VALUE;
@@ -125,8 +126,8 @@ public class Areas {
         for(int i=0; i< CITIES.length; i++)
         {
             double tempDistance = distanceMiles( lat, lon, CITIES[i].lat, CITIES[i].lon );
-            if( tempDistance < distance ) {
-                distance = tempDistance;
+            if( tempDistance < minDistance ) {
+                minDistance = tempDistance;
                 minIndex = i;
             }
         }   
@@ -135,12 +136,12 @@ public class Areas {
 
     // get distance in miles
     private double distanceMiles(double lat1, double lon1, double lat2, double lon2) {
-        return distance(lat1, lon1, lat2, lon2, "M");
+        return distance(lat1, lon1, lat2, lon2, 'M');
     }
 
     // get distance in kilometers
     private double distanceKilometers(double lat1, double lon1, double lat2, double lon2) {
-        return distance(lat1, lon1, lat2, lon2, "K");
+        return distance(lat1, lon1, lat2, lon2, 'K');
     }
 
     // get distance specify units
@@ -150,9 +151,9 @@ public class Areas {
         dist = Math.acos(dist);
         dist = rad2deg(dist);
         dist = dist * 60 * 1.1515;
-        if (unit == "K") {
+        if (unit == 'K') {
             dist = dist * 1.609344;
-        } else if (unit == "N") {
+        } else if (unit == 'M') {
             dist = dist * 0.8684;
         }
         return (dist);
@@ -171,18 +172,6 @@ public class Areas {
     private double rad2deg(double rad) {
         return (rad * 180.0 / Math.PI);
     }
-
-
-    var R = 6371; // km
-    var dLat = (lat2-lat1).toRad();
-    var dLon = (lon2-lon1).toRad();
-    var lat1 = lat1.toRad();
-    var lat2 = lat2.toRad();
-
-    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-        Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-    var d = R * c;
 
 }
 

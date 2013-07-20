@@ -12,36 +12,44 @@ import backtype.storm.task.TopologyContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import storm.starter.bolt.Areas;
 
 /**
  *
  */
 public final class AggregateBolt extends BaseBasicBolt {
-    public SemanticBolt() { }
+	List<Double> avgs;
+	List<Double> sums;
+	List<Double> counts;
+
+    public AggregateBolt() { }
 
    @Override
    public void prepare(Map conf, TopologyContext context) {
-      List<List<int>> avgs = new List<List<int>>(100);
-      List<int>
+      for (int idx = 0; idx < 100; idx++) { avgs.add(0.0); }
+      for (int idx = 0; idx < 100; idx++) { sums.add(0.0); }
+      for (int idx = 0; idx < 100; idx++) { counts.add(0.0); }
    }
-   
-   @Override
-   public final void execute(Tuple tuple, BasicOutputCollector collector) {
+
+   @Override public final void execute(Tuple tuple, BasicOutputCollector collector) {
       double lat = tuple.getDouble(0);
       double lng = tuple.getDouble(1);
-      int score = tuple.getInt(3);
+      int score = tuple.getInteger(3);
 
       Areas ars = new Areas();
-      lat = getBinLat(lng,lat);
-      lng = getBinLng(lng,lat);
-      idx = getIndex(lng,lat);
-
-      collector.emit(new Values(lng,lat,,score));
+      int idx = ars.getArea(lng,lat);
+      lat = ars.CITIES[idx].lat;
+      lng = ars.CITIES[idx].lon;
+      
+      counts.set(idx, counts.get(idx) + 1);
+      sums.set(idx, sums.get(idx) + score);
+      avgs.set(idx, sums.get(idx) / counts.get(idx));
+      collector.emit(new Values(lng,lat,counts.toArray(), avgs.toArray()));
    }
 
    @Override
    public void declareOutputFields(OutputFieldsDeclarer declarer) {
-      declarer.declare(new Fields("longitude","latitude","polarity","score"));
+      declarer.declare(new Fields("longitude","latitude","count","score"));
    }
 
 }
