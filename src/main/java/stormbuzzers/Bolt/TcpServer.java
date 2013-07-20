@@ -4,34 +4,23 @@ import java.util.Random;
 
 class TcpServer
 {
-    public static void main(String argv[]) throws Exception
-    {
-        String clientSentence;
-        String capitalizedSentence;
-        ServerSocket welcomeSocket = new ServerSocket(4545);
+	public static final int SOCKNUM = 4545;
+    private ServerSocket connectionSocket = null;
+	private DataOutputStream outToClient = null;
 
-        while(true)
-        {
-            Socket connectionSocket = welcomeSocket.accept();
-            DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
-
-            while(true)
-            {
-
-                Random generator = new Random();
-                double lat = (generator.nextDouble() * 180.0) - 90;
-                double lon = (generator.nextDouble() * 360);
-                //double lon = (generator.nextDouble() * 180.0) - 90;
-                int    sem = generator.nextInt(10);
-                String str = String.valueOf(lat) + " " + String.valueOf(lon) + " " +  String.valueOf(sem) + "\n";
-                outToClient.writeBytes(str);
-
-                try {
-                    Thread.sleep(2000);
-                } catch(InterruptedException ex) {
-                    Thread.currentThread().interrupt();
-                }
-            }
-        }
+	public TcpServer() {
+	}
+	
+	public void init() throws Exception {
+		connectionSocket = new ServerSocket(SOCKNUM);
+        outToClient = new DataOutputStream(connectionSocket.getOutputStream());
     }
+
+	public void push(float lat, float lon, int count, int sentiment) {
+		if (outToClient != null) {
+			String str = String.valueOf(lat) + " " + String.valueOf(lon) + " " +  String.valueOf(count) + " " +  String.valueOf(sentiment) + "\n";
+			outToClient.writeBytes(str);
+		}
+	}
+	  
 }

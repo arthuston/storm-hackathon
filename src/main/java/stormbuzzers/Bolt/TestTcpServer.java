@@ -4,35 +4,24 @@ import java.util.Random;
 
 class TestTcpServer
 {
-	public final int PORTNO = 4545;
+	public static final int SLEEP_MSEC = 2000;
 	
     public static void main(String argv[]) throws Exception
     {
-        String clientSentence;
-        String capitalizedSentence;
-        ServerSocket welcomeSocket = new ServerSocket(TcpServer::PORTNO);
-
-        while(true)
+		TcpServer server = new TcpServer();
+		server.init();
+        Random generator = new Random();
+		while(true)
         {
-            Socket connectionSocket = welcomeSocket.accept();
-            DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
-
-            while(true)
-            {
-
-                Random generator = new Random();
-                double lat = (generator.nextDouble() * 180.0) - 90;
-                double lon = (generator.nextDouble() * 360);
-                //double lon = (generator.nextDouble() * 180.0) - 90;
-                int    sem = generator.nextInt(10);
-                String str = String.valueOf(lat) + " " + String.valueOf(lon) + " " +  String.valueOf(sem) + "\n";
-                outToClient.writeBytes(str);
-
-                try {
-                    Thread.sleep(2000);
-                } catch(InterruptedException ex) {
-                    Thread.currentThread().interrupt();
-                }
+            float lat = (generator.nextFloat() * 180.0) - 90;
+            float lon = (generator.nextFloat() * 360);
+            int    count = generator.nextInt(100);
+            int    sentiment = generator.nextInt(10);
+			server.push(lat, lon, count, sentiment);
+            try {
+                Thread.sleep(SLEEP_MSEC);
+            } catch(InterruptedException ex) {
+				Thread.currentThread().interrupt();
             }
         }
     }
