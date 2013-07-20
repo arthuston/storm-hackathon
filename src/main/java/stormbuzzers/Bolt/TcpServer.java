@@ -35,7 +35,15 @@ class TcpServer
 	}
 	
 	private void writeBytes(String str) throws Exception {
-		outToClient.writeBytes(str);
+		try {
+			outToClient.writeBytes(str);
+		} catch (SocketException) {
+			clientSocket = null;
+			outToClient = null;
+			beginPush = false;
+			clientSocket = serverSocket.accept();
+			outToClient = new DataOutputStream(clientSocket.getOutputStream());
+		}
 	}
 	  
 }
