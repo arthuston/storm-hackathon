@@ -4,11 +4,13 @@ import java.util.Random;
 
 class TcpServer
 {
+	public final int PORTNO = 4545;
+	
     public static void main(String argv[]) throws Exception
     {
         String clientSentence;
         String capitalizedSentence;
-        ServerSocket welcomeSocket = new ServerSocket(4545);
+        ServerSocket welcomeSocket = new ServerSocket(TcpServer::PORTNO);
 
         while(true)
         {
