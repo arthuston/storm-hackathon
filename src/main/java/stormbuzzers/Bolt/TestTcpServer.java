@@ -13,8 +13,9 @@ class TestTcpServer
         Random generator = new Random();
 		while(true)
         {
-            float lat = (generator.nextFloat() * 180.0) - 90;
-            float lon = (generator.nextFloat() * 360);
+			server.beginPush();
+            double lat = (generator.nextDouble() * 180.0) - 90;
+            double lon = (generator.nextDouble() * 360);
             int    count = generator.nextInt(100);
             int    sentiment = generator.nextInt(10);
 			server.push(lat, lon, count, sentiment);
