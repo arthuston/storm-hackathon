@@ -2,8 +2,18 @@ import java.lang.Math;
 
 public class Areas {
 
-    // http://en.wikipedia.org/wiki/List_of_United_States_cities_by_population
-    private static final cities[] = {
+    // latitude and longitude
+    public class LatLon {
+        public double lat, lon;
+        public String city;
+        public LatLon(String city, double lat, double lon) {
+            this.city = city;
+            this.lat = lat;
+            this.lon = lon;
+        }
+    }
+
+    private static final LatLon CITIES[] = {
         new LatLon("NewYork",40.6643,-73.9385),
         new LatLon("California",34.0194,-118.4108),
         new LatLon("Illinois",41.8376,-87.6818),
@@ -106,33 +116,21 @@ public class Areas {
         new LatLon("Alabama",33.5274,-86.7990)
     };
 
-
-    // latitude and longitude
-    public class LatLon {
-        public double lat, lon;
-        public String city;
-        public LatLon(String city, double lat, double lon) {
-            this.city = city;
-            this.lat = lat;
-            this.lon = lon;
-        }
-    }
-
     // get area for lat lon
-    public LatLon getArea(double lat, double lon) {
+    public integer getArea(double lat, double lon) {
 
         // find closest city
         double minDistance = (double) Integer.MAX_VALUE;
         int minIndex = 0;
-        for(int i=0; i< cities.length; i++)
+        for(int i=0; i< CITIES.length; i++)
         {
-            double tempDistance = distanceMiles( lat, lon, cities[i].lat, cities[i].lon );
+            double tempDistance = distanceMiles( lat, lon, CITIES[i].lat, CITIES[i].lon );
             if( tempDistance < distance ) {
                 distance = tempDistance;
                 minIndex = i;
             }
         }   
-        return cities[minIndex];
+        return minIndex;
     }
 
     // get distance in miles
